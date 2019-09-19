@@ -25,8 +25,8 @@ unsigned int rAllOn = 2664482;
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 
-#define adc_disable() (ADCSRA &= ~(1<<ADEN)) // disable ADC (before power-off)
-#define adc_enable()  (ADCSRA |=  (1<<ADEN)) // re-enable ADC
+#define adc_disable() (ADCSRA &= ~(1<<ADEN)) // Disable ADC (before power-off)
+#define adc_enable()  (ADCSRA |=  (1<<ADEN)) // Re-enable ADC
 
 bool lastButton0 = true;
 bool lastButton1 = true;
@@ -53,7 +53,6 @@ void tx(int i) {
 
 	//delay(1000);
 	//rcSwitch.send(r1On, 24);
-
 	//sleep_enable();
 	//sleep_cpu();
 
@@ -90,12 +89,10 @@ void setup()
 	pinMode(BUTTON1_PIN, INPUT_PULLUP);
 
 	adc_disable();          // Disable Analog-to-Digital Converter
-
 	wdt_reset();            // Watchdog reset
-	//wdt_enable(WDTO_1S);    // Watchdog enable Options: 15MS, 30MS, 60MS, 120MS, 250MS, 500MS, 1S, 2S, 4S, 8S
-	wdt_enable(WDTO_250MS);
+	wdt_enable(WDTO_120MS); // Watchdog enable Options: 15MS, 30MS, 60MS, 120MS, 250MS, 500MS, 1S, 2S, 4S, 8S
 	WDTCR |= _BV(WDIE);     // Interrupts watchdog enable
-	sei();                  // enable interrupts
+	sei();                  // Enable interrupts
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Sleep Mode: max
 }
 
@@ -130,42 +127,43 @@ ISR (WDT_vect) {
 }
 
 /*
-void setup3() {
+void setup() {
 	for (byte i = 0; i < 6; i++) {
 		pinMode(i, INPUT);      // Set all ports as INPUT to save energy
 		digitalWrite (i, LOW);  //
 	}
 	adc_disable();
 
-	pinMode(BUTTON_PIN, INPUT);        // sets the digital pin as input
-	digitalWrite(BUTTON_PIN, HIGH);
+	pinMode(BUTTON0_PIN, INPUT_PULLUP);        // Sets the digital pin as input
 }
 
-void wakeUpNow(){        // here the interrupt is handled after wakeup
+void wakeUpNow() {        // Here the interrupt is handled after wakeup
 
-	//execute code here after wake-up before returning to the loop() function
-	// timers and code using timers (serial.print and more...) will not work here.
+	// Execute code here after wake-up before returning to the loop() function
+	// Timers and code using timers (serial.print and more...) will not work here.
 	//digitalWrite(interruptPin, HIGH);
 }
 
-void sleepNow(){
-
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);   // sleep mode is set here
-    sleep_enable();                          // enables the sleep bit in the mcucr register so sleep is possible
-    attachInterrupt(0, wakeUpNow, LOW);     // use interrupt 0 (pin 2) and run function wakeUpNow when pin 2 gets LOW
+void sleepNow() {
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);	// Sleep mode is set here
+    sleep_enable();                         // Enables the sleep bit in the mcucr register so sleep is possible
+    attachInterrupt(0, wakeUpNow, LOW);     // Use interrupt 0 (pin 2) and run function wakeUpNow when pin 2 gets LOW
     //digitalWrite(ledPin, LOW);
 
-    sleep_mode();                          // here the device is actually put to sleep!!
+    sleep_mode();                           // Here the device is actually put to sleep!!
 
-    sleep_disable();                       // first thing after waking from sleep: disable sleep...
-    detachInterrupt(0);                    // disables interrupton pin 3 so the wakeUpNow code will not be executed during normal running time.
-    //delay(250);                           // wait 2 sec. so humans can notice the interrupt LED to show the interrupt is handled
-    //digitalWrite (interruptPin, LOW);       // turn off the interrupt LED
-
+    sleep_disable();                       // First thing after waking from sleep: disable sleep...
+    detachInterrupt(0);                    // Disables interruption pin 3 so the wakeUpNow code will not be executed during normal running time.
+    //delay(250);                          // Wait 2 sec. so humans can notice the interrupt LED to show the interrupt is handled
+    //digitalWrite (interruptPin, LOW);    // Turn off the interrupt LED
 }
 
-void loop3() {
-	tx();
+void loop() {
 	sleepNow();
+
+	digitalWrite(LED0_PIN, HIGH);
+	delay(500);
+	digitalWrite(LED0_PIN, LOW);
+
 }
 */
