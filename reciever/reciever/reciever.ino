@@ -1,7 +1,7 @@
 #include "Arduino.h"
 //The setup function is called once at startup of the sketch
 
-#include "libraries/RCSwitch.h"
+#include "RCSwitch.h"
 RCSwitch rcSwitch = RCSwitch();
 #define RFRX_PIN 1 //D3
 // Receiver on interrupt 0 => that is pin #2
@@ -103,14 +103,16 @@ void loop()
 		//onMillis = millis();
 
 		unsigned long code = rcSwitch.getReceivedValue();
-		if(code == 2664495L) {
+		//if(code == 2664495L) {
+		if(code == 43055) {
 			//1 on
 			onMillis = millis();
 		}
-		if(code == 2664493) {
+		if(code == 2664493L) {
 			//2 on
 		}
-		if(code == 2664494L) {
+		//if(code == 2664494L) {
+		if(code == 43054) {
 			//1 off
 		}
 		if(code == 2664492L) {
